@@ -1,5 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { UserContext } from "./context/useContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddFilmAdmin from "./pages/AddFilmAdmin";
@@ -12,30 +14,89 @@ import NotFound from "./pages/NotFound";
 import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
 import TVSeries from "./pages/TVSeries";
-import { IsLoginRoute, IsAdminRoute } from './PrivateRoute'
+import { IsLoginRoute, IsAdminRoute } from "./PrivateRoute";
+
+import { API, setAuthToken } from "./config/api";
+
+// init token on axios every time the app is refreshed
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 function App() {
+  let navigate = useNavigate();
+  const [state, dispatch] = useContext(UserContext);
+  console.clear();
+  console.log(state);
+  useEffect(() => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+
+    // Redirect Auth
+    if (state.isLogin === false) {
+      navigate("/");
+    } else {
+      if (state.user.status === "admin") {
+        navigate("/transaction");
+      } else if (state.user.status === "customer") {
+        navigate("/");
+      }
+    }
+  }, [state]);
+
+  const checkUser = async () => {
+    try {
+      const response = await API.get("/check-auth");
+
+      // If the token incorrect
+      if (response.status === 404) {
+        return dispatch({
+          type: "AUTH_ERROR",
+        });
+      }
+
+      // Get user data
+      let payload = response.data.data.user;
+      // Get token from local storage
+      payload.token = localStorage.token;
+
+      // Send data to useContext
+      dispatch({
+        type: "USER_SUCCESS",
+        payload,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (localStorage.token) {
+      checkUser();
+    }
+  }, []);
+
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="*" element={<NotFound />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/movies" element={<Movies />} />
-          <Route path="/tvseries" element={<TVSeries />} />
-          <Route element={<IsLoginRoute />} path={"/"}>
-            <Route path="/payment" element={<Payment />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route element={<IsAdminRoute />} path={"/"}>
-              <Route path="/addfilm" element={<AddFilmAdmin />} />
-              <Route path="/listtransaction" element={<ListTransactionAdmin />} />
-              <Route path="/listfilm" element={<ListFilmAdmin />} />
-              <Route path="/listfilm/:category" element={<ListFilmAdmin />} />
-            </Route>
+      <Routes>
+        <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/detail/:id" element={<Detail />} />
+        <Route path="/movies" element={<Movies />} />
+        <Route path="/tvseries" element={<TVSeries />} />
+        <Route element={<IsLoginRoute />} path={"/"}>
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route element={<IsAdminRoute />} path={"/"}>
+            <Route path="/addfilm" element={<AddFilmAdmin />} />
+            <Route path="/listtransaction" element={<ListTransactionAdmin />} />
+            <Route path="/listfilm" element={<ListFilmAdmin />} />
+            <Route path="/listfilm/:category" element={<ListFilmAdmin />} />
           </Route>
-        </Routes>
-      </BrowserRouter>
+        </Route>
+      </Routes>
+
       <ToastContainer
         position="top-center"
         autoClose={3000}
