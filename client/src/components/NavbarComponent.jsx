@@ -8,6 +8,7 @@ import {
   InputGroup,
   Nav,
   Navbar,
+  Alert,
 } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +16,8 @@ import user from "../fakeData/user.json";
 import { Error, Success } from "../helpers/toast";
 import { AiOutlineTransaction } from "react-icons/ai";
 import MediaQuery from "react-responsive";
+import { useMutation } from "react-query";
+import { API } from "../config/api";
 
 function NavbarComponent() {
   const [showRegister, setShowRegister] = useState(false);
@@ -22,6 +25,7 @@ function NavbarComponent() {
   const [isLogin, setIsLogin] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userData, setUserData] = useState([]);
+  const [message, setMessage] = useState(true);
 
   const handleCloseRegister = () => setShowRegister(false);
   const handleShowRegister = () => setShowRegister(true);
@@ -69,8 +73,9 @@ function NavbarComponent() {
     gender: "",
     phone: "",
     address: "",
-    image: "",
   });
+
+  const { email, password, fullName, gender, phone, address } = dataRegister;
 
   function handleChangeLogin(e) {
     setDataLogin({
@@ -112,6 +117,35 @@ function NavbarComponent() {
   function handleSubmitRegister() {
     console.log(dataRegister);
   }
+
+  const handleSubmit = useMutation(async (e) => {
+    try {
+      e.preventDefault();
+
+      // Configuration Content-type
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      // Data body
+      const body = JSON.stringify(dataRegister);
+
+      // Insert data user to database
+      const response = await API.post("/register", body, config);
+
+      // Handling response here
+    } catch (error) {
+      const alert = (
+        <Alert variant="danger" className="py-1">
+          Failed
+        </Alert>
+      );
+      setMessage(alert);
+      console.log(error);
+    }
+  });
 
   return (
     <>
@@ -417,6 +451,7 @@ function NavbarComponent() {
       </Modal>
 
       {/* // Register Modal */}
+      {/* <Register show={showRegister} onHide={handleCloseRegister} /> */}
       <Modal show={showRegister} onHide={handleCloseRegister}>
         <Modal.Body
           style={{
@@ -430,7 +465,7 @@ function NavbarComponent() {
           <h2>
             <b>Register</b>
           </h2>
-          <Form className="mt-4">
+          <Form className="mt-4" onSubmit={(e) => handleSubmit.mutate(e)}>
             <InputGroup className="mb-3 mt-3">
               <Form.Control
                 placeholder="Email"
@@ -528,6 +563,7 @@ function NavbarComponent() {
                 color: "#E50914",
                 borderRadius: "5px",
               }}
+              type="submit"
               className="w-100 pt-2 pb-2 mt-3"
               onClick={handleSubmitRegister}
             >
