@@ -32,9 +32,8 @@ function App() {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-
     // Redirect Auth
-    if (state.isLogin === false) {
+    if (state.isLogin === true) {
       navigate("/");
     } else {
       if (state.user.status === "admin") {

@@ -59,11 +59,6 @@ function NavbarComponent() {
   const [dataLogin, setDataLogin] = useState({
     email: "",
     password: "",
-    fullName: "",
-    gender: "",
-    phone: "",
-    address: "",
-    image: "",
   });
 
   const [dataRegister, setDataRegister] = useState({
@@ -75,7 +70,8 @@ function NavbarComponent() {
     address: "",
   });
 
-  const { email, password, fullName, gender, phone, address } = dataRegister;
+  // const { email, password, fullName, gender, phone, address } = dataRegister;
+  // const { email, password } = dataLogin;
 
   function handleChangeLogin(e) {
     setDataLogin({
@@ -134,6 +130,76 @@ function NavbarComponent() {
 
       // Insert data user to database
       const response = await API.post("/register", body, config);
+
+      // if (response?.status === 200) {
+      //   // Send data to useContext
+      //   dispatch({
+      //     type: "LOGIN_SUCCESS",
+      //     payload: response.data.data,
+      //   });
+
+      //   // Status check
+      //   if (response.data.data.status === "admin") {
+      //     navigate("/transaction");
+      //   } else {
+      //     navigate("/");
+      //   }
+      //   const alert = (
+      //     <Alert variant="success" className="py-1">
+      //       Login success
+      //     </Alert>
+      //   );
+      //   setMessage(alert);
+      // }
+      // Handling response here
+    } catch (error) {
+      const alert = (
+        <Alert variant="danger" className="py-1">
+          Failed
+        </Alert>
+      );
+      setMessage(alert);
+      console.log(error);
+    }
+  });
+
+  const handleLogin = useMutation(async (e) => {
+    try {
+      e.preventDefault();
+
+      // Configuration Content-type
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      // Data body
+      const body = JSON.stringify(dataLogin);
+
+      // Insert data user to database
+      const response = await API.post("/Login", body, config);
+
+      if (response?.status === 200) {
+        // Send data to useContext
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: response.data.data,
+        });
+
+        // Status check
+        if (response.data.data.status === "admin") {
+          navigate("/transaction");
+        } else {
+          navigate("/");
+        }
+        const alert = (
+          <Alert variant="success" className="py-1">
+            Login success
+          </Alert>
+        );
+        setMessage(alert);
+      }
 
       // Handling response here
     } catch (error) {
@@ -374,6 +440,7 @@ function NavbarComponent() {
       </Navbar>
 
       {/* // Login Modal */}
+      {message && message}
       <Modal show={showLogin} onHide={handleCloseLogin}>
         <Modal.Body
           style={{
@@ -387,7 +454,7 @@ function NavbarComponent() {
           <h2>
             <b>Login</b>
           </h2>
-          <Form className="mt-4">
+          <Form className="mt-4" onSubmit={(e) => handleLogin.mutate(e)}>
             <InputGroup className="mb-3 mt-3">
               <Form.Control
                 placeholder="Email"
@@ -427,6 +494,7 @@ function NavbarComponent() {
               }}
               className="w-100 pt-2 pb-2 mt-3"
               onClick={handleSubmitLogin}
+              type="submit"
             >
               <b>Login</b>
             </Button>
@@ -451,7 +519,7 @@ function NavbarComponent() {
       </Modal>
 
       {/* // Register Modal */}
-      {/* <Register show={showRegister} onHide={handleCloseRegister} /> */}
+      {message && message}
       <Modal show={showRegister} onHide={handleCloseRegister}>
         <Modal.Body
           style={{
