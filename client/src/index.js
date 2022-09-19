@@ -4,7 +4,7 @@ import App from "./App";
 import "./index.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { UserContextProvider } from "./context/useContext";
+import { UserContextProvider } from "./context/userContext";
 
 const client = new QueryClient();
 

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Button,
   Dropdown,
@@ -18,6 +18,7 @@ import { AiOutlineTransaction } from "react-icons/ai";
 import MediaQuery from "react-responsive";
 import { useMutation } from "react-query";
 import { API } from "../config/api";
+import { UserContext } from "../context/userContext";
 
 function NavbarComponent() {
   const [showRegister, setShowRegister] = useState(false);
@@ -26,7 +27,7 @@ function NavbarComponent() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userData, setUserData] = useState([]);
   const [message, setMessage] = useState(true);
-
+  const [state, dispatch] = useContext(UserContext);
   const handleCloseRegister = () => setShowRegister(false);
   const handleShowRegister = () => setShowRegister(true);
 
@@ -178,7 +179,8 @@ function NavbarComponent() {
       const body = JSON.stringify(dataLogin);
 
       // Insert data user to database
-      const response = await API.post("/Login", body, config);
+      const response = await API.post("/login", body, config);
+      console.log(response);
 
       if (response?.status === 200) {
         // Send data to useContext
@@ -189,7 +191,7 @@ function NavbarComponent() {
 
         // Status check
         if (response.data.data.status === "admin") {
-          navigate("/transaction");
+          navigate("/");
         } else {
           navigate("/");
         }

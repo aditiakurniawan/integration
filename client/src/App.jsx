@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useContext, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { UserContext } from "./context/useContext";
+import { UserContext } from "./context/userContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddFilmAdmin from "./pages/AddFilmAdmin";
@@ -38,7 +38,7 @@ function App() {
     } else {
       if (state.user.status === "admin") {
         navigate("/transaction");
-      } else if (state.user.status === "customer") {
+      } else if (state.user.status === "member") {
         navigate("/");
       }
     }
@@ -95,18 +95,6 @@ function App() {
           </Route>
         </Route>
       </Routes>
-
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </>
   );
 }
