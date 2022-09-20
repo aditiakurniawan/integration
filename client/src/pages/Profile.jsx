@@ -3,30 +3,31 @@ import NavbarComponent from "../components/NavbarComponent";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom'
-import { Error } from '../helpers/toast'
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Error } from "../helpers/toast";
+import { UserContext } from "../context/UserContext";
 
 function Profile() {
-  document.title = `Profile | Dumbflix`
-
-  const [userData, setUserData] = useState([])
-  const navigate = useNavigate()
+  document.title = `Profile | Dumbflix`;
+  const [state, dispatch] = useContext(UserContext);
+  const [userData, setUserData] = useState([]);
+  const navigate = useNavigate();
 
   function getUserData() {
-    if (!localStorage.getItem("dataLogin")) {
-      navigate("/")
-      Error({ message: "Silahkan login terlebih dahulu!" })
+    if (!state.isLogin) {
+      navigate("/");
+      Error({ message: "Silahkan login terlebih dahulu!" });
     }
 
-    const data = JSON.parse(localStorage.getItem("dataLogin"))
-    console.log(data)
-    setUserData(data)
+    // const data = JSON.parse(state.user);
+    // setUserData(state);
+    console.log(state);
   }
 
   useEffect(() => {
-    getUserData()
-  }, [])
+    getUserData();
+  }, []);
 
   return (
     <>
@@ -34,16 +35,16 @@ function Profile() {
       <div className="bg-black h-100">
         <Container
           fluid
-          className="bg-black pb-5"
+          className="bg-black pb-5 h-100"
           style={{ color: "white", height: "100vh", paddingTop: "69px" }}
         >
           <Row className="bg-dark m-auto w-50 p-4 ">
             <Col sm={12} md={12} lg={8} xl={8}>
               <h1>Personal info</h1>
               <div className="d-flex pt-3">
-                <img src={'/assets/icon/avatar.svg'} alt="avatar" />
+                <img src={"/assets/icon/avatar.svg"} alt="avatar" />
                 <div className="p-2">
-                  <h6 className="mb-1">{userData.fullName}</h6>
+                  <h6 className="mb-1">{state?.user?.Fullname}</h6>
                   <h6
                     style={{
                       fontSize: "10px",
@@ -56,9 +57,9 @@ function Profile() {
                 </div>
               </div>
               <div className="d-flex">
-                <img src={'/assets/icon/letter.svg'} alt="avatar" />
+                <img src={"/assets/icon/letter.svg"} alt="avatar" />
                 <div className="p-2">
-                  <h6 className="mb-1">{userData.email}</h6>
+                  <h6 className="mb-1">{state?.user?.email}</h6>
                   <h6
                     style={{
                       fontSize: "10px",
@@ -71,9 +72,12 @@ function Profile() {
                 </div>
               </div>
               <div className="d-flex">
-                <img src={'/assets/icon/shape.svg'} alt="avatar" />
+                <img src={"/assets/icon/shape.svg"} alt="avatar" />
                 <div className="p-2">
-                  <h6 className="mb-1">{userData.status}</h6>
+                  <h6 className="mb-1">
+                    {/* {state?.user?.status} */}
+                    Active
+                  </h6>
                   <h6
                     style={{
                       fontSize: "10px",
@@ -86,9 +90,9 @@ function Profile() {
                 </div>
               </div>
               <div className="d-flex">
-                <img src={'/assets/icon/gender.svg'} alt="avatar" />
+                <img src={"/assets/icon/gender.svg"} alt="avatar" />
                 <div className="p-2">
-                  <h6 className="mb-1">{userData.gender}</h6>
+                  <h6 className="mb-1">{state?.user?.gender}</h6>
                   <h6
                     style={{
                       fontSize: "10px",
@@ -101,9 +105,9 @@ function Profile() {
                 </div>
               </div>
               <div className="d-flex">
-                <img src={'/assets/icon/phone.svg'} alt="avatar" />
+                <img src={"/assets/icon/phone.svg"} alt="avatar" />
                 <div className="p-2">
-                  <h6 className="mb-1">{userData.phone}</h6>
+                  <h6 className="mb-1">{state?.user?.phone}</h6>
                   <h6
                     style={{
                       fontSize: "10px",
@@ -116,11 +120,9 @@ function Profile() {
                 </div>
               </div>
               <div className="d-flex">
-                <img src={'/assets/icon/map.svg'} alt="avatar" />
+                <img src={"/assets/icon/map.svg"} alt="avatar" />
                 <div className="p-2">
-                  <h6 className="mb-1">
-                    {userData.email}
-                  </h6>
+                  <h6 className="mb-1">{state?.user?.address}</h6>
                   <h6
                     style={{
                       fontSize: "10px",
@@ -133,9 +135,16 @@ function Profile() {
                 </div>
               </div>
             </Col>
-            <Col sm={12} md={12} lg={4} xl={4} className="p-0 justify-content-center">
+            <Col
+              sm={12}
+              md={12}
+              lg={4}
+              xl={4}
+              className="p-0 justify-content-center"
+            >
               <img
-                src={userData.image}
+                // src={state?.image}
+                src={"/assets/icon/avatar.svg"}
                 alt="profile"
                 style={{ width: "100%", height: "300px", objectFit: "cover" }}
                 className="rounded mb-2"

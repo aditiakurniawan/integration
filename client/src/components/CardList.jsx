@@ -1,10 +1,12 @@
-/* eslint-disable */ 
+/* eslint-disable */
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
 import dataFilm from "../fakeData/datafilm.json";
 import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
+import { API } from "../config/api";
 
 function CardList(props) {
   const [data, setData] = useState([]);

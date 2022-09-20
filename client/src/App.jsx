@@ -36,9 +36,9 @@ function App() {
     if (state.isLogin === true) {
       navigate("/");
     } else {
-      if (state.user.status === "admin") {
+      if (state.user.role === "Admin") {
         navigate("/transaction");
-      } else if (state.user.status === "member") {
+      } else if (state.user.role === "Member") {
         navigate("/");
       }
     }

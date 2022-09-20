@@ -36,26 +36,26 @@ function NavbarComponent() {
 
   const navigate = useNavigate();
 
-  function checkUserLogin() {
-    const dataLogin = JSON.parse(localStorage.getItem("dataLogin"));
-    const email = dataLogin.email;
-    const password = dataLogin.password;
-    const data = user?.filter(
-      (item) => item.email == email && item.password == password
-    );
-    data[0].role == "admin" ? setIsAdmin(true) : setIsAdmin(false);
-    if (!data.length) {
-      setIsLogin(false);
-      localStorage.removeItem("dataLogin");
-      Error({ message: "Silahkan login kembali!" });
-    }
-    setIsLogin(true);
-    setUserData(data[0]);
-  }
+  // function checkUserLogin() {
+  //   const dataLogin = JSON.parse(data.data);
+  //   const email = dataLogin.email;
+  //   const password = dataLogin.password;
+  //   // const data = user?.filter(
+  //   //   (item) => item.email == email && item.password == password
+  //   // );
+  //   data.data.role == "Admin" ? setIsAdmin(true) : setIsAdmin(false);
+  //   if (!data.length) {
+  //     setIsLogin(false);
+  //     localStorage.removeItem(state);
+  //     Error({ message: "Silahkan login kembali!" });
+  //   }
+  //   setIsLogin(true);
+  //   setUserData(data.data);
+  // }
 
-  useEffect(() => {
-    if (localStorage.getItem("dataLogin")) checkUserLogin();
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem("dataLogin")) checkUserLogin();
+  // }, []);
 
   const [dataLogin, setDataLogin] = useState({
     email: "",
@@ -81,12 +81,13 @@ function NavbarComponent() {
     });
   }
 
-  function handleLogout() {
-    localStorage.removeItem("dataLogin");
-    setIsLogin(false);
-    setIsAdmin(false);
-    Success({ message: "Logout berhasil!" });
-  }
+  const logout = () => {
+    console.log(state);
+    dispatch({
+      type: "LOGOUT",
+    });
+    navigate("/");
+  };
 
   function handleSubmitLogin() {
     const login = user.filter(
@@ -97,7 +98,7 @@ function NavbarComponent() {
     if (!login.length) {
       return Error({ message: "Email / password salah!" });
     }
-    localStorage.setItem("dataLogin", JSON.stringify(login[0]));
+    // localStorage.setItem("dataLogin", JSON.stringify(login[0]));
     console.log("Login berhasil sebagai", login[0].role);
     setShowLogin(false);
 
@@ -138,22 +139,22 @@ function NavbarComponent() {
         handleCloseRegister();
         handleShowLogin();
         dispatch({
-          type: "LOGIN_SUCCESS",
+          type: "USER_SUCCESS",
           payload: response.data.data,
         });
 
         // Status check
-        if (response.data.data.status === "admin") {
-          navigate("/transaction");
-        } else {
-          navigate("/");
-        }
-        const alert = (
-          <Alert variant="success" className="py-1">
-            Login success
-          </Alert>
-        );
-        setMessage(alert);
+        // if (response.data.data.role === "Admin") {
+        //   navigate("/transaction");
+        // } else {
+        //   navigate("/");
+        // }
+        // const alert = (
+        //   <Alert variant="success" className="py-1">
+        //     Login success
+        //   </Alert>
+        // );
+        // setMessage(alert);
       }
       // Handling response here
     } catch (error) {
@@ -167,6 +168,7 @@ function NavbarComponent() {
     }
   });
 
+  // login
   const handleLogin = useMutation(async (e) => {
     try {
       e.preventDefault();
@@ -194,10 +196,10 @@ function NavbarComponent() {
         });
 
         // Status check
-        if (response.data.data.status === "Admin") {
-          navigate("/");
+        if (response.data.data.role === "Admin") {
+          navigate("/transaction");
         } else {
-          navigate("/profile");
+          navigate("/");
         }
         const alert = (
           <Alert variant="success" className="py-1">
@@ -235,7 +237,7 @@ function NavbarComponent() {
             <div
               className="position-absolute"
               style={
-                !isAdmin
+                !state.isAdmin
                   ? { top: "15px", left: "45%" }
                   : { top: "15px", left: "5%" }
               }
@@ -247,7 +249,7 @@ function NavbarComponent() {
             <div
               className="position-absolute"
               style={
-                !isAdmin
+                !state.isAdmin
                   ? { top: "15px", left: "45%" }
                   : { top: "15px", left: "45%" }
               }
@@ -257,7 +259,7 @@ function NavbarComponent() {
           </MediaQuery>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="w-100">
-              {!isAdmin && (
+              {!state.isAdmin && (
                 <>
                   <Link
                     className="text-white fw-bold d-flex justify-content-start text-decoration-none d-flex align-items-center pt-2 pb-2"
@@ -423,7 +425,7 @@ function NavbarComponent() {
                         <Dropdown.Item
                           style={{ color: "white" }}
                           className="d-flex align-items-center"
-                          onClick={handleLogout}
+                          onClick={logout}
                         >
                           <Image
                             src="/assets/icon/logout-dd.svg"
