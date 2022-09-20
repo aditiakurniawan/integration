@@ -18,7 +18,7 @@ import { AiOutlineTransaction } from "react-icons/ai";
 import MediaQuery from "react-responsive";
 import { useMutation } from "react-query";
 import { API } from "../config/api";
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../context/UserContext";
 
 function NavbarComponent() {
   const [showRegister, setShowRegister] = useState(false);
@@ -100,6 +100,7 @@ function NavbarComponent() {
     localStorage.setItem("dataLogin", JSON.stringify(login[0]));
     console.log("Login berhasil sebagai", login[0].role);
     setShowLogin(false);
+
     checkUserLogin();
     Success({ message: "Login berhasil!" });
   }
@@ -132,26 +133,28 @@ function NavbarComponent() {
       // Insert data user to database
       const response = await API.post("/register", body, config);
 
-      // if (response?.status === 200) {
-      //   // Send data to useContext
-      //   dispatch({
-      //     type: "LOGIN_SUCCESS",
-      //     payload: response.data.data,
-      //   });
+      if (response?.status === 200) {
+        // Send data to useContext
+        handleCloseRegister();
+        handleShowLogin();
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: response.data.data,
+        });
 
-      //   // Status check
-      //   if (response.data.data.status === "admin") {
-      //     navigate("/transaction");
-      //   } else {
-      //     navigate("/");
-      //   }
-      //   const alert = (
-      //     <Alert variant="success" className="py-1">
-      //       Login success
-      //     </Alert>
-      //   );
-      //   setMessage(alert);
-      // }
+        // Status check
+        if (response.data.data.status === "admin") {
+          navigate("/transaction");
+        } else {
+          navigate("/");
+        }
+        const alert = (
+          <Alert variant="success" className="py-1">
+            Login success
+          </Alert>
+        );
+        setMessage(alert);
+      }
       // Handling response here
     } catch (error) {
       const alert = (
@@ -183,6 +186,7 @@ function NavbarComponent() {
       console.log(response);
 
       if (response?.status === 200) {
+        handleCloseLogin();
         // Send data to useContext
         dispatch({
           type: "LOGIN_SUCCESS",
@@ -190,10 +194,10 @@ function NavbarComponent() {
         });
 
         // Status check
-        if (response.data.data.status === "admin") {
+        if (response.data.data.status === "Admin") {
           navigate("/");
         } else {
-          navigate("/");
+          navigate("/profile");
         }
         const alert = (
           <Alert variant="success" className="py-1">
@@ -282,7 +286,7 @@ function NavbarComponent() {
                 </>
               )}
               <div className="d-flex w-100 justify-content-end">
-                {!isLogin ? (
+                {!state.isLogin ? (
                   <>
                     <Button
                       style={{
@@ -347,7 +351,7 @@ function NavbarComponent() {
                             top: "-15px",
                           }}
                         ></div>
-                        {isAdmin && (
+                        {state.isAdmin && (
                           <>
                             <Dropdown.Item
                               style={{ color: "white" }}
@@ -381,7 +385,7 @@ function NavbarComponent() {
                             </Dropdown.Item>
                           </>
                         )}
-                        {!isAdmin && (
+                        {!state.isAdmin && (
                           <>
                             <Dropdown.Item
                               style={{ color: "white" }}
@@ -442,7 +446,6 @@ function NavbarComponent() {
       </Navbar>
 
       {/* // Login Modal */}
-      {message && message}
       <Modal show={showLogin} onHide={handleCloseLogin}>
         <Modal.Body
           style={{
@@ -453,6 +456,7 @@ function NavbarComponent() {
           }}
           className="rounded"
         >
+          {/* {message && message} */}
           <h2>
             <b>Login</b>
           </h2>
@@ -495,7 +499,7 @@ function NavbarComponent() {
                 borderRadius: "5px",
               }}
               className="w-100 pt-2 pb-2 mt-3"
-              onClick={handleSubmitLogin}
+              onClick={handleSubmit}
               type="submit"
             >
               <b>Login</b>
@@ -521,7 +525,6 @@ function NavbarComponent() {
       </Modal>
 
       {/* // Register Modal */}
-      {message && message}
       <Modal show={showRegister} onHide={handleCloseRegister}>
         <Modal.Body
           style={{
@@ -532,12 +535,14 @@ function NavbarComponent() {
           }}
           className="rounded"
         >
+          {/* {message && message} */}
           <h2>
             <b>Register</b>
           </h2>
           <Form className="mt-4" onSubmit={(e) => handleSubmit.mutate(e)}>
             <InputGroup className="mb-3 mt-3">
               <Form.Control
+                value={dataRegister.email}
                 placeholder="Email"
                 style={{
                   backgroundColor: "#4C4C4C",
@@ -553,6 +558,7 @@ function NavbarComponent() {
             </InputGroup>
             <InputGroup className="mb-3 mt-3">
               <Form.Control
+                value={dataRegister.password}
                 placeholder="Password"
                 style={{
                   backgroundColor: "#4C4C4C",
@@ -569,6 +575,7 @@ function NavbarComponent() {
             </InputGroup>
             <InputGroup className="mb-3 mt-3">
               <Form.Control
+                value={dataRegister.fullName}
                 placeholder="Full Name"
                 style={{
                   backgroundColor: "#4C4C4C",
@@ -584,6 +591,7 @@ function NavbarComponent() {
             </InputGroup>
             <InputGroup className="mb-3 mt-3">
               <Form.Control
+                value={dataRegister.gender}
                 placeholder="Gender"
                 style={{
                   backgroundColor: "#4C4C4C",
@@ -599,6 +607,7 @@ function NavbarComponent() {
             </InputGroup>
             <InputGroup className="mb-3 mt-3">
               <Form.Control
+                value={dataRegister.phone}
                 placeholder="Phone"
                 style={{
                   backgroundColor: "#4C4C4C",
@@ -614,6 +623,7 @@ function NavbarComponent() {
             </InputGroup>
             <InputGroup className="mb-3 mt-3">
               <Form.Control
+                value={dataRegister.address}
                 placeholder="Address"
                 style={{
                   backgroundColor: "#4C4C4C",
@@ -635,7 +645,9 @@ function NavbarComponent() {
               }}
               type="submit"
               className="w-100 pt-2 pb-2 mt-3"
-              onClick={handleSubmitRegister}
+              onClick={(e) => {
+                handleSubmit.mutate(e);
+              }}
             >
               <b>Register</b>
             </Button>

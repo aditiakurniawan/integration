@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useContext, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { UserContext } from "./context/userContext";
+import { UserContext } from "./context/UserContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddFilmAdmin from "./pages/AddFilmAdmin";
@@ -26,7 +26,7 @@ if (localStorage.token) {
 function App() {
   let navigate = useNavigate();
   const [state, dispatch] = useContext(UserContext);
-  console.clear();
+  // console.clear();
   console.log(state);
   useEffect(() => {
     if (localStorage.token) {
@@ -47,7 +47,7 @@ function App() {
   const checkUser = async () => {
     try {
       const response = await API.get("/check-auth");
-
+      console.log(response);
       // If the token incorrect
       if (response.status === 404) {
         return dispatch({
@@ -56,7 +56,7 @@ function App() {
       }
 
       // Get user data
-      let payload = response.data.data.user;
+      let payload = response.data.data;
       // Get token from local storage
       payload.token = localStorage.token;
 

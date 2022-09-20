@@ -9,6 +9,7 @@ import (
 type AuthRepository interface {
 	Register(user models.User) (models.User, error)
 	Login(email string) (models.User, error)
+	Getuser(ID int) (models.User, error)
 }
 
 func RepositoryAuth(db *gorm.DB) *repository {
