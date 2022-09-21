@@ -3,8 +3,8 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
-import dataFilm from "../fakeData/datafilm.json";
-import { useState, useEffect } from "react";
+// import dataFilm from "../fakeData/datafilm.json";
+import { useState, useEffect, useContext } from "react";
 import { useQuery } from "react-query";
 import { API } from "../config/api";
 
@@ -22,6 +22,14 @@ function CardList(props) {
   useEffect(() => {
     filterFilmByCategory();
   }, []);
+
+  const state = useContext(UserContext);
+  console.log("state", state);
+  let { data: films } = useQuery("filmsCache", async () => {
+    const response = await API.get("/films");
+    console.log("ini response", response);
+    return response.data.data;
+  });
 
   return (
     <Container fluid className="bg-black text-light pt-5 ps-5 pe-5">

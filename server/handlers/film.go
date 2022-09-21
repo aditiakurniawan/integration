@@ -78,11 +78,12 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 
 	category_id, _ := strconv.Atoi(r.FormValue("category_id"))
 	request := filmdto.FilmRequest{
-		Title:       r.FormValue("title"),
-		Description: r.FormValue("description"),
-		Year:        r.FormValue("year"),
-		CategoryID:  category_id,
-		Link:        r.FormValue("Link"),
+		Title:         r.FormValue("title"),
+		Description:   r.FormValue("description"),
+		Thumbnailfilm: filename,
+		Year:          r.FormValue("year"),
+		CategoryID:    category_id,
+		Link:          r.FormValue("Link"),
 	}
 
 	validation := validator.New()
@@ -108,6 +109,7 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
+		return
 	}
 
 	film, _ = h.FilmRepository.GetFilm(film.ID)

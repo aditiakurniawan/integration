@@ -18,9 +18,10 @@ function AddFilmAdmin() {
     title: "",
     thumbnailfilm: "",
     year: "",
-    category: "",
+    // category: "",
     description: "",
     link: "",
+    category_id: "",
   });
 
   function handlePlusFilm(e) {
@@ -30,11 +31,11 @@ function AddFilmAdmin() {
 
   const getFilm = async () => {
     try {
-      const response = await API.get("/fim");
+      const response = await API.get("/categories");
       setFilmCounter(response.data.data);
       console.log(response);
-    } catch (eror) {
-      console.log(eror);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -56,7 +57,7 @@ function AddFilmAdmin() {
     setForm({
       ...form,
       [e.target.name]:
-        e.target.type === "file" ? e.terget.files : e.target.value,
+        e.target.type === "file" ? e.target.files : e.target.value,
     });
     if (e.target.type === "file") {
       let url = URL.createObjectURL(e.target.files[0]);
@@ -71,14 +72,19 @@ function AddFilmAdmin() {
       const config = {
         Headers: {
           "Content-type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.token}`,
         },
       };
 
       const formData = new FormData();
       formData.set("title", form?.title);
-      formData.set("attach", form?.thumbnailfilm);
+      formData.set(
+        "thumbnailFilm",
+        form.thumbnailfilm[0],
+        form.thumbnailfilm[0].name
+      );
       formData.set("year", form?.year);
-      formData.set("category", form?.category);
+      formData.set("category_id", form?.category_id);
       formData.set("description", form?.description);
       formData.set("link", form?.link);
 
@@ -87,8 +93,8 @@ function AddFilmAdmin() {
       const response = await API.post("/film", formData, config);
       console.log(response);
       Navigate("/listfilm");
-    } catch (eror) {
-      console.log(eror);
+    } catch (error) {
+      console.log(error);
     }
   });
 
@@ -125,7 +131,6 @@ function AddFilmAdmin() {
 
             <Col md={12} lg={4} xl={3}>
               <label
-                name="thumbnailfilm"
                 htmlFor="attach"
                 style={{
                   background: "rgba(210, 210, 210, 0.25)",
@@ -152,7 +157,7 @@ function AddFilmAdmin() {
               <input
                 onChange={handleChange}
                 type="file"
-                name="attach"
+                name="thumbnailfilm"
                 id="attach"
                 hidden
               />
@@ -169,10 +174,35 @@ function AddFilmAdmin() {
               type="number"
               placeholder="Year"
               name="year"
+              onChange={handleChange}
             />
           </Form.Group>
 
-          <Form.Group className="mb-4" controlId="formGridAddress2">
+          <select
+            className="py-1  w-100 mb-4"
+            style={{
+              border: "1px solid white",
+              background: "rgba(210, 210, 210, 0.25)",
+              color: "rgba(210, 210, 210, 0.25)",
+              height: "50px",
+              color: "white",
+              borderRadius: "6px",
+            }}
+            name="category_id"
+            onChange={handleChange}
+          >
+            <option value="" selected hidden>
+              Category
+            </option>
+            <option value="1" className="bg-dark">
+              Movies
+            </option>
+            <option value="2" className="bg-dark">
+              Tv Series
+            </option>
+          </select>
+
+          {/* <Form.Group className="mb-4" controlId="formGridAddress2">
             <Dropdown align={{ lg: "end" }}>
               <Dropdown.Toggle
                 id="dropdown-button-dark-example1"
@@ -205,7 +235,7 @@ function AddFilmAdmin() {
                 </div>
               </Dropdown.Toggle>
               {/* {categories.map((item, index)=> (
-                ))} */}
+                ))} 
               <Dropdown.Menu
                 variant="dark"
                 className="bg-black mt-4"
@@ -221,7 +251,7 @@ function AddFilmAdmin() {
                 <Dropdown.Item href="#/action-2">Fight</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-          </Form.Group>
+          </Form.Group> */}
 
           <Form.Control
             as="textarea"
@@ -240,7 +270,7 @@ function AddFilmAdmin() {
 
           {/* Film */}
 
-          <Row className="mb-4">
+          {/* <Row className="mb-4">
             <Col md={12} lg={8} xl={9}>
               <Form.Control
                 onChange={handleChange}
@@ -283,7 +313,7 @@ function AddFilmAdmin() {
                 hidden
               />
             </Col>
-          </Row>
+          </Row> */}
 
           <Form.Group className="mb-4" controlId="formGridAddress1">
             <Form.Control
@@ -295,9 +325,10 @@ function AddFilmAdmin() {
               type="url"
               placeholder="Link Film"
               name="link"
+              onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group className="mb-5" controlId="formGridAddress1">
+          {/* <Form.Group className="mb-5" controlId="formGridAddress1">
             <div>
               <button
                 style={{
@@ -319,7 +350,7 @@ function AddFilmAdmin() {
                 />
               </button>
             </div>
-          </Form.Group>
+          </Form.Group> */}
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
             <Button
               type="submit"
