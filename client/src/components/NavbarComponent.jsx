@@ -191,9 +191,10 @@ function NavbarComponent() {
             <div
               className="position-absolute"
               style={
-                !state.user.role == "Admin"
-                  ? { top: "15px", left: "45%" }
-                  : { top: "15px", left: "5%" }
+                // !state.user.role == "Admin"
+                // ?
+                { top: "15px", left: "45%" }
+                // : { top: "15px", left: "5%" }
               }
             >
               <Link
@@ -209,9 +210,10 @@ function NavbarComponent() {
             <div
               className="position-absolute"
               style={
-                !state.user.role == "Admin"
-                  ? { top: "15px", left: "45%" }
-                  : { top: "15px", left: "45%" }
+                // !state.user.role == "Admin"
+                // ?
+                { top: "15px", left: "45%" }
+                // : { top: "15px", left: "45%" }
               }
             >
               <Link
@@ -225,34 +227,34 @@ function NavbarComponent() {
           </MediaQuery>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="w-100">
-              {!state.user.role == "Admin" && (
-                <>
-                  <Link
-                    className="text-white fw-bold d-flex justify-content-start text-decoration-none d-flex align-items-center pt-2 pb-2"
-                    style={{ width: "100px" }}
-                    to={"/"}
-                    id="RouterNavLink"
-                  >
-                    Home
-                  </Link>
-                  <Link
-                    className="text-white fw-bold d-flex justify-content-start text-decoration-none d-flex align-items-center pt-2 pb-2"
-                    style={{ width: "130px" }}
-                    to={"/tvseries"}
-                    id="RouterNavLink"
-                  >
-                    TV Shows
-                  </Link>
-                  <Link
-                    className="text-white fw-bold d-flex justify-content-start text-decoration-none d-flex align-items-center pt-2 pb-2"
-                    style={{ width: "130px" }}
-                    to={"/movies"}
-                    id="RouterNavLink"
-                  >
-                    Movies
-                  </Link>
-                </>
-              )}
+              {/* {!state.user.role == "Admin" && ( */}
+              <>
+                <Link
+                  className="text-white fw-bold d-flex justify-content-start text-decoration-none d-flex align-items-center pt-2 pb-2"
+                  style={{ width: "100px" }}
+                  to={"/"}
+                  id="RouterNavLink"
+                >
+                  Home
+                </Link>
+                <Link
+                  className="text-white fw-bold d-flex justify-content-start text-decoration-none d-flex align-items-center pt-2 pb-2"
+                  style={{ width: "130px" }}
+                  to={"/tvseries"}
+                  id="RouterNavLink"
+                >
+                  TV Shows
+                </Link>
+                <Link
+                  className="text-white fw-bold d-flex justify-content-start text-decoration-none d-flex align-items-center pt-2 pb-2"
+                  style={{ width: "130px" }}
+                  to={"/movies"}
+                  id="RouterNavLink"
+                >
+                  Movies
+                </Link>
+              </>
+              {/* )} */}
               <div className="d-flex w-100 justify-content-end">
                 {!state.isLogin ? (
                   <>

@@ -35,7 +35,7 @@ function Profile() {
       <div className="bg-black h-100">
         <Container
           fluid
-          className="bg-black pb-5 h-100"
+          className="bg-black pb-5 "
           style={{ color: "white", height: "100vh", paddingTop: "69px" }}
         >
           <Row className="bg-dark m-auto w-50 p-4 ">
