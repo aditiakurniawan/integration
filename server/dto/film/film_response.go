@@ -7,4 +7,5 @@ type FilmResponse struct {
 	Year          string `json:"year" form:"year" gorm:"type: text"`
 	Description   string `json:"description" gorm:"type: text" `
 	CategoryID    int    `json:"category_id"`
+	Link          string `json:"link" form:"link" gorm:"type: text"`
 }

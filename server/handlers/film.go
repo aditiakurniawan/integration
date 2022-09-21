@@ -82,6 +82,7 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 		Description: r.FormValue("description"),
 		Year:        r.FormValue("year"),
 		CategoryID:  category_id,
+		Link:        r.FormValue("Link"),
 	}
 
 	validation := validator.New()
@@ -99,6 +100,7 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 		Year:          request.Year,
 		Description:   request.Description,
 		CategoryID:    request.CategoryID,
+		Link:          request.Link,
 	}
 
 	data, err := h.FilmRepository.CreateFilm(film)
@@ -149,6 +151,9 @@ func (h *handlerFilm) UpdateFilm(w http.ResponseWriter, r *http.Request) {
 	if request.Description != "" {
 		film.Description = request.Description
 	}
+	if request.Link != "" {
+		film.Link = request.Link
+	}
 
 	data, err := h.FilmRepository.UpdateFilm(film)
 	if err != nil {
@@ -194,6 +199,7 @@ func convertResponseFilm(u models.Film) filmdto.FilmResponse {
 		Thumbnailfilm: u.Thumbnailfilm,
 		Year:          u.Year,
 		Description:   u.Description,
+		Link:          u.Link,
 		// Category:      u.Category,
 	}
 }

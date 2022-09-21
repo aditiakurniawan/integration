@@ -13,10 +13,10 @@ function ListTransactionAdmin() {
     <>
       <NavbarComponent />
       <div
-        className="px-5 pt-5 bg-black text-white"
-        style={{ height: "100vh" }}
+        className="px-5 pt-5 bg-black text-white "
+        // style={{ height: "100vh" }}
       >
-        <Container style={{ height: "90vh", background: "black" }}>
+        <Container style={{ height: "100vh", background: "black" }}>
           <h2 className="fw-bold mb-5">Incoming Transaction</h2>
           <Table
             striped

@@ -23,8 +23,8 @@ import { UserContext } from "../context/UserContext";
 function NavbarComponent() {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
+  // const [isAdmin, setIsAdmin] = useState(false);
   const [userData, setUserData] = useState([]);
   const [message, setMessage] = useState(true);
   const [state, dispatch] = useContext(UserContext);
@@ -66,19 +66,8 @@ function NavbarComponent() {
   };
 
   function handleSubmitLogin() {
-    const login = user.filter(
-      (item) =>
-        item.email === dataLogin.email && item.password === dataLogin.password
-    );
-    console.log(login);
-    if (!login.length) {
-      return Error({ message: "Email / password salah!" });
-    }
-    // localStorage.setItem("dataLogin", JSON.stringify(login[0]));
     console.log("Login berhasil sebagai", login[0].role);
     setShowLogin(false);
-
-    checkUserLogin();
     Success({ message: "Login berhasil!" });
   }
 
@@ -423,10 +412,10 @@ function NavbarComponent() {
           }}
           className="rounded"
         >
-          {/* {message && message} */}
           <h2>
             <b>Login</b>
           </h2>
+          {message && message}
           <Form className="mt-4" onSubmit={(e) => handleLogin.mutate(e)}>
             <InputGroup className="mb-3 mt-3">
               <Form.Control
