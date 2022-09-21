@@ -3,7 +3,7 @@ import HeroImage from "../components/HeroImage";
 import NavbarComponent from "../components/NavbarComponent";
 
 function TVSeries() {
-  document.title = `TV Series | Dumbflix`
+  document.title = `TV Series | Dumbflix`;
 
   return (
     <>
@@ -17,6 +17,7 @@ function TVSeries() {
         category="TV Series"
         watch="/detail/16"
       />
+      <h5>Tv Series</h5>
       <CardList title="TV Series" category="tv-series" limit={12} />
     </>
   );

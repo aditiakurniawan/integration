@@ -3,7 +3,7 @@ import NavbarComponent from "../components/NavbarComponent";
 import CardList from "../components/CardList";
 
 function Home() {
-  document.title = `Home | Dumbflix`
+  document.title = `Home | Dumbflix`;
 
   return (
     <>
@@ -18,8 +18,10 @@ function Home() {
         category="TV Series"
         watch="/detail/13"
       />
-      <div className="py-3" style={{backgroundColor: "black"}}></div>
+      <div className="py-3" style={{ backgroundColor: "black" }}></div>
+      {/* <h5>Tv Series</h5> */}
       <CardList title="TV Series" category="tv-series" limit={6} />
+      {/* <h5>Movies</h5> */}
       <CardList title="Movies" category="movies" limit={6} />
     </>
   );

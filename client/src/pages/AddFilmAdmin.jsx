@@ -86,7 +86,7 @@ function AddFilmAdmin() {
       formData.set("year", form?.year);
       formData.set("category_id", form?.category_id);
       formData.set("description", form?.description);
-      formData.set("link", form?.link);
+      formData.set("Link", form?.link);
 
       console.log(form);
 

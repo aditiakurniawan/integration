@@ -23,7 +23,7 @@ if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
 
-function App() {
+export default function App() {
   let navigate = useNavigate();
   const [state, dispatch] = useContext(UserContext);
   // console.clear();
@@ -101,5 +101,3 @@ function App() {
     </>
   );
 }
-
-export default App;

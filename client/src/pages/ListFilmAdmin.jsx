@@ -8,8 +8,8 @@ import CardList from "../components/CardList";
 import NavbarComponent from "../components/NavbarComponent";
 
 function ListFilmAdmin() {
-  document.title = `List Film | Dumbflix`
-  const params = useParams()
+  document.title = `List Film | Dumbflix`;
+  const params = useParams();
 
   return (
     <>
@@ -41,8 +41,12 @@ function ListFilmAdmin() {
                     style={{ border: "1px solid white" }}
                   >
                     <Dropdown.Item href="/listfilm">All</Dropdown.Item>
-                    <Dropdown.Item href="/listfilm/tv-series">TV Series</Dropdown.Item>
-                    <Dropdown.Item href="/listfilm/movies">Movies</Dropdown.Item>
+                    <Dropdown.Item href="/listfilm/tv-series">
+                      TV Series
+                    </Dropdown.Item>
+                    <Dropdown.Item href="/listfilm/movies">
+                      Movies
+                    </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
@@ -65,14 +69,18 @@ function ListFilmAdmin() {
             </Col>
           </Row>
         </div>
-        {!params["category"] ?
-          (
-            <>
-              <CardList title="TV Series" category="tv-series" limit={12} />
-              <CardList title="Movies" category="movies" limit={12} />
-            </>
-          ) : params["category"] == "tv-series" ? <CardList title="TV Series" category="tv-series" limit={12} /> : <CardList title="Movies" category="movies" limit={12} />
-        }
+        {!params["category"] ? (
+          <>
+            {/* <h5>Tv Series</h5> */}
+            <CardList title="TV Series" category="tv-series" limit={12} />
+            {/* <h5>Movies</h5> */}
+            <CardList title="Movies" category="movies" limit={12} />
+          </>
+        ) : params["category"] == "tv-series" ? (
+          <CardList title="TV Series" category="tv-series" limit={12} />
+        ) : (
+          <CardList title="Movies" category="movies" limit={12} />
+        )}
       </div>
     </>
   );

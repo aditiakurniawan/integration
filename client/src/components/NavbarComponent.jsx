@@ -196,7 +196,13 @@ function NavbarComponent() {
                   : { top: "15px", left: "5%" }
               }
             >
-              <Image src={" /assets/images/dumbflix.png"} />
+              <Link
+                className="text-decoration-none "
+                to={"/"}
+                id="RouterNavLink"
+              >
+                <Image src={" /assets/images/dumbflix.png"} />
+              </Link>
             </div>
           </MediaQuery>
           <MediaQuery maxWidth={1000}>
@@ -208,7 +214,13 @@ function NavbarComponent() {
                   : { top: "15px", left: "45%" }
               }
             >
-              <Image src={" /assets/images/dumbflix.png"} />
+              <Link
+                className="text-decoration-none "
+                to={"/"}
+                id="RouterNavLink"
+              >
+                <Image src={" /assets/images/dumbflix.png"} />
+              </Link>
             </div>
           </MediaQuery>
           <Navbar.Collapse id="basic-navbar-nav">
