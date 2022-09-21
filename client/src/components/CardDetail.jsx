@@ -1,20 +1,28 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import dataFilm from "../fakeData/datafilm.json";
+// import dataFilm from "../fakeData/datafilm.json";
+import { UserContext } from "../context/UserContext";
+import { useQuery } from "react-query";
+import { API } from "../config/api";
+import { useParams } from "react-router-dom";
 
-function CardDetail(props) {
-  const [data, setData] = useState([]);
+function CardDetail() {
+  const { id } = useParams();
+  let { data: films } = useQuery("detailCache", async () => {
+    const response = await API.get("/film/" + id);
+    console.log("response film", response);
+    return response.data.data;
+  });
 
-  useEffect(() => {
-    setData(dataFilm.filter((item) => item.id == props.id)[0]);
-  }, []);
-
-  document.title = `${data?.title} | Dumbflix`;
+  document.title = `${films?.title} | Dumbflix`;
+  // let link = `${films?.link}`;
+  // console.log(link);
+  // let trailerId = `link.slice(-11)`;
 
   return (
     <Card
@@ -30,10 +38,10 @@ function CardDetail(props) {
         }}
       >
         <Row>
-          <Col sm={3}>
+          <Col sm={3} className="mt-4">
             <Card.Img
               variant="top"
-              src={data?.image}
+              src={films?.thumbnailfilm}
               style={{
                 width: "200px",
                 height: "300px",
@@ -41,9 +49,9 @@ function CardDetail(props) {
               }}
             />
           </Col>
-          <Col sm={5}>
+          <Col sm={5} className="mt-5">
             <Card.Body>
-              <h1>{data?.title}</h1>
+              <h1>{films?.title}</h1>
               <div
                 style={{
                   display: "flex",
@@ -73,7 +81,8 @@ function CardDetail(props) {
                   }}
                   h
                 >
-                  {data?.category}
+                  {/* {films?.category} */}
+                  Movies
                 </Button>
               </div>
               <Card.Text
@@ -83,7 +92,7 @@ function CardDetail(props) {
                   fontsize: "18px",
                 }}
               >
-                {data?.description}
+                {films?.description}
               </Card.Text>
             </Card.Body>
           </Col>
@@ -91,7 +100,8 @@ function CardDetail(props) {
             <button className="bg-black">
               <Card.Img
                 variant="top"
-                src={`https://img.youtube.com/vi/${data?.trailerId}/maxresdefault.jpg`}
+                src={films?.thumbnailfilm}
+                // {`https://img.youtube.com/vi/${films?.trailerId}/maxresdefault.jpg`}
                 style={{
                   position: "absolute",
                   width: "494px",
@@ -117,11 +127,11 @@ function CardDetail(props) {
                 fontWeight: "bolder",
               }}
             >
-              {props.isVideoPlaying == "play"
+              {/* {props.isVideoPlaying == "play"
                 ? "Is Play Now"
                 : props.isVideoPlaying == "pause"
                 ? "Video Paused"
-                : ""}
+                : ""} */}
             </h4>
             {/* <button className="bg-dark" onClick={() => props.setIsVideoPlaying(true)}>
               <GoPlay
@@ -140,7 +150,7 @@ function CardDetail(props) {
                 margin: "305px 184px 10px 15px",
               }}
             >
-              {data?.title}
+              {films?.title}
             </p>
           </Col>
           {/* <Col sm={1} className="ps-5">
