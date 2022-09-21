@@ -35,10 +35,13 @@ function App() {
     // Redirect Auth
     if (state.isLogin === true) {
       navigate("/");
-    } else {
       if (state.user.role === "Admin") {
-        navigate("/transaction");
+        console.log("Admin");
+
+        navigate("/listtransaction");
       } else if (state.user.role === "Member") {
+        console.log("Member");
+
         navigate("/");
       }
     }

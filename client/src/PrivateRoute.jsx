@@ -16,16 +16,8 @@ export function IsLoginRoute() {
 /* eslint-disable */
 export function IsAdminRoute() {
   const [state, dispatch] = useContext(UserContext);
-  let isAdmin = false;
-  const dataLogin = JSON.parse(state);
-  const email = dataLogin.email;
-  const password = dataLogin.password;
-  const data = user?.filter(
-    (item) => item.email == email && item.password == password
-  );
-  data.data.role == "Admin" ? (isAdmin = true) : (isAdmin = false);
 
-  if (isAdmin) {
+  if (state.user.role == "Admin") {
     return <Outlet />;
   } else {
     return <Navigate to={"/"} />;
