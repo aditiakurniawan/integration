@@ -10,6 +10,7 @@ type User struct {
 	Address   string `json:"address" gorm:"type: varchar(255)"`
 	Subscribe string `json:"subscribe" gorm:"type: varchar(255)"`
 	Role      string `json:"role"`
+	Token     string `json : "token" gorm:"type: varchar(255)"`
 }
 
 type UsersResponse struct {
@@ -21,6 +22,7 @@ type UsersResponse struct {
 	Phone     string `json:"phone" `
 	Address   string `json:"address" `
 	Subscribe string `json:"subscribe" `
+	Token     string `json : "token"`
 }
 
 func (UsersResponse) TableName() string {
