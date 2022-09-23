@@ -202,57 +202,6 @@ function AddFilmAdmin() {
             </option>
           </select>
 
-          {/* <Form.Group className="mb-4" controlId="formGridAddress2">
-            <Dropdown align={{ lg: "end" }}>
-              <Dropdown.Toggle
-                id="dropdown-button-dark-example1"
-                variant="secondary"
-                className="py-1  w-100 "
-                style={{
-                  border: "1px solid white",
-                  background: "rgba(210, 210, 210, 0.25)",
-                  color: "rgba(210, 210, 210, 0.25)",
-                  height: "50px",
-                  color: "white",
-                }}
-              >
-                <div className="d-grid gap-3 d-md-flex justify-content-md-between">
-                  <label
-                    htmlFor=""
-                    style={{
-                      marginTop: "6px",
-                    }}
-                  >
-                    Category
-                  </label>
-                  <BsCaretDown
-                    style={{
-                      color: "#6C757D",
-                      fontSize: "30px",
-                      marginTop: "4px",
-                    }}
-                  />
-                </div>
-              </Dropdown.Toggle>
-              {/* {categories.map((item, index)=> (
-                ))} 
-              <Dropdown.Menu
-                variant="dark"
-                className="bg-black mt-4"
-                style={{
-                  border: "1px solid white",
-                  backgroundColor: "rgba(210, 210, 210, 0.25)",
-                }}
-              >
-                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Drama</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Commedy</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Romance</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Fight</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Form.Group> */}
-
           <Form.Control
             as="textarea"
             onChange={handleChange}

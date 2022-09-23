@@ -4,10 +4,17 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Table from "react-bootstrap/Table";
 import NavbarComponent from "../components/NavbarComponent";
 import { AiFillCaretDown } from "react-icons/ai";
-import transaction from "../fakeData/transaction.json";
+import { useQuery } from "react-query";
+import { API } from "../config/api";
+// import transaction from "../fakeData/transaction.json";
 
 function ListTransactionAdmin() {
   document.title = `List Transaction | Dumbflix`;
+  let { data: transactions } = useQuery("transactionsCache", async () => {
+    const response = await API.get("/transactions");
+    console.log("response transactions", response);
+    return response.data.data;
+  });
 
   return (
     <>
@@ -44,32 +51,39 @@ function ListTransactionAdmin() {
               </tr>
             </thead>
             <tbody>
-              {transaction?.map((item, index) => {
+              {transactions?.map((item, index) => {
                 return (
                   <tr key={index} style={{ height: "74px" }}>
                     <td>{index + 1}</td>
-                    <td>{item.users}</td>
+                    <td>{item.user?.fullName}</td>
                     <td>
-                      <u>{item.bukti}</u>
+                      <u>{item.user?.fullName}.png</u>
                     </td>
-                    <td>{item.remaining}</td>
+                    <td>
+                      {" "}
+                      0 hari
+                      {/* {item.remaining} */}
+                    </td>
                     <td
                       className={
-                        item.status == "Active" ? "text-success" : "text-danger"
+                        // item.status == "Active" ?
+                        "text-success"
+                        // : "text-danger"
                       }
                     >
-                      {item.status}
+                      Active
+                      {/* {item.Status} */}
                     </td>
                     <td
                       className={
-                        item.payment == "Approve"
+                        item.Status == "Approve"
                           ? "text-success"
-                          : item.payment == "Pending"
+                          : item.Status == "pending"
                           ? "text-warning"
                           : "text-danger"
                       }
                     >
-                      {item.payment}
+                      {item.Status}
                     </td>
                     <td>
                       <Dropdown>
@@ -93,10 +107,20 @@ function ListTransactionAdmin() {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu variant="dark" className="bg-black ">
-                          <Dropdown.Item className="text-success">
+                          <Dropdown.Item
+                            className="text-success"
+                            value="Approved"
+                            name="Approved"
+                            // onChange={handleChange}
+                          >
                             Approved
                           </Dropdown.Item>
-                          <Dropdown.Item className="text-danger">
+                          <Dropdown.Item
+                            className="text-danger"
+                            value="Cancel"
+                            name="Cancel"
+                            // onChange={handleChange}
+                          >
                             Cancel
                           </Dropdown.Item>
                         </Dropdown.Menu>

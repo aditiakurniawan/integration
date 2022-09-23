@@ -4,8 +4,8 @@ package models
 
 type Transaction struct {
 	ID        int           `json:"id"`
-	StartDate string        `json:"-"`
-	DueDate   string        `json:"-"`
+	StartDate string        `json:"startDate"`
+	DueDate   string        `json:"dueDate"`
 	UserID    int           `json:"userid"`
 	User      UsersResponse `json:"user" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Attache   string        `json:"attache" gorm:"type: varchar(255)"`

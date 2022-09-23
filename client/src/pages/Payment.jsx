@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { API } from "../config/api";
 
-async function Payment() {
+function Payment() {
   document.title = `Payment | Dumbflix`;
 
   let Navigate = useNavigate();
@@ -43,31 +43,73 @@ async function Payment() {
     };
   }, []);
 
-  // Insert transaction data
-  const response = await API.post("/transaction", config);
+  const handleBuy = useMutation(async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        userId: profile?.ID,
+      };
+      const body = JSON.stringify(data);
+      const config = {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer" + localStorage.token,
+          "Content-type": "application/json",
+        },
+        body,
+      };
+      // Insert transaction data
+      const response = await API.post("/transaction", config);
+      console.log("transaction", response);
+      const token = response.data.data.token;
 
-  const token = response.data.token;
-
-  window.snap.pay(token, {
-    onSuccess: function (result) {
-      /* You may add your own implementation here */
-      console.log(result);
-      history.push("/");
-    },
-    onPending: function (result) {
-      /* You may add your own implementation here */
-      console.log(result);
-      history.push("/");
-    },
-    onError: function (result) {
-      /* You may add your own implementation here */
-      console.log(result);
-    },
-    onClose: function () {
-      /* You may add your own implementation here */
-      alert("you closed the popup without finishing the payment");
-    },
+      window.snap.pay(token, {
+        onSuccess: function (result) {
+          /* You may add your own implementation here */
+          console.log(result);
+          Navigate("/profile");
+        },
+        onPending: function (result) {
+          /* You may add your own implementation here */
+          console.log(result);
+          Navigate("/profile");
+        },
+        onError: function (result) {
+          /* You may add your own implementation here */
+          console.log(result);
+        },
+        onClose: function () {
+          /* You may add your own implementation here */
+          alert("you closed the popup without finishing the payment");
+        },
+      });
+    } catch (error) {}
   });
+
+  const [previewSrc, setPreviewSrc] = useState(null);
+  const [file, setFile] = useState(null);
+
+  const onChangeFiles = (e) => {
+    let fileInfo = e.target.files[0];
+    setFile(fileInfo);
+    let reader = new FileReader();
+
+    if (e.target.files.length === 0) {
+      return;
+    }
+
+    reader.onloadend = (e) => {
+      setPreviewSrc([reader.result]);
+    };
+
+    reader.readAsDataURL(fileInfo);
+  };
+
+  const inputFileRef = useRef(null);
+
+  const onBtnClick = () => {
+    inputFileRef.current.click();
+  };
 
   return (
     <>
@@ -125,6 +167,7 @@ async function Payment() {
                         textAlign: "center",
                       }}
                       className="w-100"
+                      // onClick={() => onBtnClick()}
                     >
                       Attache proof of transfer
                       <IoMdAttach
@@ -135,11 +178,19 @@ async function Payment() {
                         }}
                       />
                     </label>
-                    <input type="file" name="attach" id="attach" hidden />
+                    <input
+                      type="file"
+                      name="attach"
+                      id="attach"
+                      hidden
+                      onChange={(e) => onChangeFiles(e)}
+                    />
                   </div>
                 </div>
                 <div className="d-flex my-5">
                   <Button
+                    type="submit"
+                    onClick={(e) => handleBuy.mutate(e)}
                     className=" mb-3 w-100 mx-auto "
                     style={{ backgroundColor: "#E50914", border: "1px white" }}
                   >
